@@ -1,0 +1,299 @@
+RELEASE 2.2	December 1st 1993	RELEASE 2.2	December 1st 1993
+
+Version 2.2 Release Notes:
+
+Release 2.2 has a few bugs fixed and some OS/2 functionality changed.
+Well, at least thats the way it started.
+
+Changes Functionality:
+
+220 Beta Release
+
+    1.	The Lexical analyser and Word Expansion code have been completely
+        replaced, courtesy of Simon J. Gerraty who allowed me to take the
+	initial code from his PD version of the ksh.  This means that the
+	8th bit problem has been disappeared and meta-character processing
+	should be fixed.
+    2.  Array parameters have been implemented.
+    3.  A bug in keyboard handling for Swedish keyboards has been fixed.
+    4.  When preparing the parameters for a command, the convert option
+	converts / following a - now to a \ which it didn't before.
+    5.  The time command has been implemented, for what it's worth.
+    6.  Csh type alternations ({..,...,}) are supported.  They must be enabled
+	using set -o alternation.  They can be disabled using
+	set +o alternation.
+    7.  Numeric values inside a numeric expression are now of the format
+	base#value instead of the old [base]value.  This conforms to the
+	versions of the ksh I have.
+    8.  When a tilde subsitution is performed, double slashes are reduced
+	to one.
+
+221 Beta Release
+
+    9.	Fixed bug in Filename completion when the string to expand is empty.
+
+   10.	Fixed bug which generated the 'too many files open' message.
+
+   11.  Fixed bug which caused $() pipelines to not write the final output
+        to stdout.
+
+222 Beta Release
+
+   12.  Fix bug in doecho which causes a memory overflow with long parameters
+
+   13.  Fix bug in sh4.c which causes a memory violation if the first
+        argument expands to a (char *)NULL.
+
+   14.  OS/2 Native Port for IBM C Set/2 1.0 CSD 40.  Future releases
+        contain three executables:
+
+	   shdos.exe - MSDOS version
+	   sh16.exe  - OS/2 16-bit version
+	   sh32.exe  - OS/2 32-bit version
+
+   15.  Fix a bug in FileName Completion so that HPFSs are handled correctly.
+
+   16.  Ensure I/O streams (cf. fopen) are closed correctly.
+
+   17.  Fix cursor position on last line of screen when inserting characters.
+        Also ensure cursor is placed on the next blank line when input in
+	completed.
+
+   18.  Fix a bug in the processing of Aliases.  The word following a alias
+	was always checked for alias, which should only happen if the last
+	character of the alias is a space (c = CHAR_TAB, instead of c ==
+	CHAR_TAB).
+
+   19.  Allow the title of a OS/2 window to be changed from MS Shell by 
+	setting the WINTITLE environment variable.
+
+   20.  Fix bug in display functions which caused memory violation on case
+   	statements.
+
+   21.  Fix bug in Swap failure under MSDOS
+
+   22.  Fix bug in \nnn processing.  Only convert if the n's are octal and
+        there are three of them.
+
+   23.  Fix bug in if..then..else..fi where Exit status not set correctly.
+
+   24.  Support script files ending in .ksh as well as .sh.
+
+   25.  Fix bug with ; ; as a command line
+
+   26.  Fix bug with IFS values not reset correctly after subshell.
+
+   27.  Fix bug in IsCommandBuiltIn which did not return the correct value
+        for a drive change.
+
+   28.  Under OS/2, protect against drive not ready errors.
+
+   29.  Fixed a bug which seemed to have been around since 1.4 which
+        stopped 'sh -x script' from executing.
+
+   30.  Fixed a bug caused an interactive shell to start in response to
+        'sh -c'.
+
+   31.  Improved the syntax error reporting.
+
+   32.  Fixed a bug with 'sh -s' which did not match the manual page.
+
+   33.  Changed the way programs are DosExecPgm'd in OS/2 so that
+        interrupts do not kill background tasks and foreground tasks are
+        interruptable, and the interrupt does not kill the shell!
+
+   34.  Directory Listing looks more like Korn Shell now.
+
+   35.	A sort of version of times for OS/2 2.x 32-bit version.
+
+   36.	Start work on VI and EMACS.  VI tested.  EMACS completely untested
+	and not enabled.
+
+   37.  Fixed a optimiser bug in doexec, which caused exec to hang the
+	PC under MSDOS.
+
+   38.  Support for Borland Turbo C added (still requires Microsoft MASM).
+        You need to edit tsh.lnk to reflect library and CRT locations.
+
+   39.  Support for WatCom C/386 added (incomplete).  I've not had enough
+        time to explore this compiler.
+
+   40.  Move stdargv.c into sh8.c to reduce size of MSDOS version to 170K.
+
+223 Beta Release
+
+   41.  Fixed processing of Profile so that $HOME can be set in /etc/profile.
+
+   42.  Fixed processing of history file so that it is loaded after processing
+   	the profiles.
+
+   43.  Completed VI code.
+
+   44.  Fixed some other bugs introduced by 'quick fixes'.
+
+   44.  Fixed bug with EOF key.
+
+   45.  Add option to remove case sensitivity for OS/2 on HPFS (set -o
+        ignorecase)
+
+224 Beta Release
+
+   46.  WATCOM 32-bit mode DOS available.  So we now have four versions!!
+
+	   shdos16.exe - MSDOS 16-bit version
+	   shdos32.exe - MSDOS 32-bit version
+	   shos216.exe - OS/2 16-bit version
+	   shos232.exe - OS/2 32-bit version
+
+	Added new environment variable SHMODE which gives the Shell mode
+	- 16 or 32 bit.
+
+   47.  Fixed bug in startup code under MSC 6 which expects the stdargv
+	code to set up _osmajor and _osminor under MSDOS.
+
+   48.  Changed the Interrupt 24 handling for DOS 32 version.
+
+   49.  cd -L/P and pwd -L/P supported under DOS.  Gets the truename of 
+	a directory, ignoring SUBST drives etc.
+
+   50.  Fix bug in startup code for DOS which does not process the length
+        of the command string correctly - KERMIT problem.  Also, if EMX
+	mode has been used, do not correct /c command string.  Check for
+	double quotes on the command string if in argument 0 (original DOS
+	or OS/2 command line).
+
+   51.  Set -m now runs background jobs in separate process group - OS/2
+        only.  The old -m functionality is obtained from -M.
+
+   52.  Fix Input so that prompt appears for interactive shell when input
+        is not from the console.  Note that editing is not available for
+	such input.
+
+   53.	Set up I/O streams buffering for stdout and stderr to line and none
+        respectively.
+
+   55.  Implement track all command which was missing.
+
+   56.	Fix another bug in file handler for sub-shells.  Use a map instead
+        of the next available file descriptor at a particular sub-shell level.
+
+   57.  Under OS/2, if file descriptor 0 and 1 are pipes and there are no
+        arguments to the shell, the interactive flag is set.  This is to
+	allow the shell to run under EMACS.
+
+225 Beta Release
+
+   58.  Fix a bug with Root shells and the EOF key which caused the shell to
+        loop on the no exit message.
+
+   59.  Replaced all the isatty functions with an explicit test so we get
+        the same results on DOS and OS/2 and independent of the compiler.
+
+   60.  In the test (dotest) code, if the current string is a unary operator
+        and the next string is a binary operator, assume the current string is a
+	parameter to the binary operator and not a unary operator. And not
+	the other way round.
+
+   61.  Fix bug in dotrap which prevented traps from being unset.
+
+   62.  Add support for signal names and UNIX to DOS mappings in trap.  If
+        the signal number is numeric, it is a UNIX signal number and is mapped
+	to the DOS value.  Also add 'trap -l' to list the signal names
+	which are not the same as the kill names.
+
+   63.  Allow test and set of VERIFY and BREAK status using set -o etc.
+
+   64.  Move interrupt check from sh0.asm to sh9.c
+
+   65.  Update manual pages
+
+226 Beta Release
+
+Final Release 2.2
+
+
+Missing POSIX Shell functionality:
+
+    I've looked at three different version of ksh (under AIX, HP UX and ICL's
+    DN/X) and each one has something slightly different.  In general, I believe
+    the following functionality is missing from the shell, some of which can not
+    be implemented under either MSDOS or OS/2.
+
+    1.  Filename generation currently matches the Bourne and not the Korn shell
+    2.  EMACS command line editting is not tested
+
+    Missing, not supportable.
+
+    1.  The ulimit command - no MSDOS or OS/2 equivalent
+    2.  The bg and fg commands are not implemented - no equivalent
+	functionality.
+    3.  The set -p (disable $HOME/.profile processing) has not been implemented.
+    4.  The ~ at the start of a word only supports the $HOME, $PWD or $OLDPWD
+        substitutions.  There's no /etc/passwd.
+    5.  TMOUT is not implemented, what's functionality under MSDOS or OS/2 I
+	ask?
+    6.  jobs under MSDOS - HA!
+    7.  Co-processes.  Again, really difficult to implement under MSDOS
+        and OS/2 (I think).
+
+The following enhancements/bugs remain outstanding:
+
+    1.  Interrupting a swap at the wrong time may cause the shell to hang.
+	I've not been able to track this down.  I think it may be some funny
+	interaction with Quaterdesk's QEMM memory manager, since it does
+	not happen with any other memory manager.
+
+    2.  Under IBM's OS/2 C Set/2, the umask API does not work correctly.
+	umask (0) returns an error, when it should return the current
+	value.
+    
+    3.  Under WATCOM and OS/2, the DosQProcStatus API causes a core dump,
+	so the jobs function is disabled in versions built with WATCOM.
+	WATCOM have been informed - no response.  Use ps.exe instead.
+	The shell fex's ps.exe so if you use jobs, stick ps.exe in your
+	path.
+    
+    4.  Under OS/2 in 16-bit mode, the DosStartSession API causes the
+	system to died with dependent sessions.  Sessions are always
+	independent.  IBM (UK) have been informed - no response.  Microsoft
+	haven't.
+
+    5.	The only the VI command line edit function is enabled.  I've not
+	done any testing on the EMACS version (next release). 
+
+    6.  I've built and run the Borland Turbo C version, but not really done
+	extensive testing on it.  The main development and release compiler
+	remains Microsoft C5.1 (for MSDOS) and C6.0 (for OS/2).  Actually,
+	it's stopped working at the moment!
+
+    7.  I've built and tested the OS/2 2.x 32-bit version using IBM C Set/2
+	(CSD 40), and extensively tested using that version.  However, I am
+	no longer in a position to build using this compiler.  Problems from
+	36 onwards (see notes file) have not been fully tested for the IBM
+	C Set/2 OS/2 32-bit version.
+
+Thanks are due to
+
+    rreiner@nexus.yorku.ca 
+    dkonkin@datap.ca 
+    leisner@eso.mc.xerox.com
+    sshoe@IX.Net
+    mallman@oucsace.cs.ohiou.edu
+    hankedr@mail.auburn.edu
+    beckerr@pyrite.SOM.CWRU.Edu
+    tripos!rhea!edmond@wupost.wustl.edu
+    Eric.van.der.Maarel@cwi.nl
+    kjt@cs.stir.ac.uk
+    qualtrak@netcom.com
+    hoh@lorelei.approve.se
+    rma@pnet51.orb.mn.org 
+    Carl_Hauser.PARC@xerox.com
+    matth@bedford.progress.COM
+    mattes@azu.informatik.uni-stuttgart.de 
+    dasch@darkwing.uoregon.edu
+    rommel@ars.muc.de
+
+for their comments, fixes, tolerance etc in testing release 2.2
+
+Ian Stewartson.
+(istewart@datlog.co.uk)

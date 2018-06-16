@@ -1,0 +1,115 @@
+Shell Version 2.2	INSTALL				December 1993
+
+ MS-DOS SHELL - Copyright (c) 1990,3 Data Logic Limited and Charles Forsyth
+
+ This code is based on (in part) the shell program written by Charles
+ Forsyth and is subject to the following copyright restrictions:
+
+ 1.  Redistribution and use in source and binary forms are permitted
+     provided that the above copyright notice is duplicated in the
+     source form and the copyright notice in file sh6.c is displayed
+     on entry to the program.
+
+ 2.  The sources (or parts thereof) or objects generated from the
+     sources (or parts of sources) cannot be sold under any circumstances.
+
+    $Header: /usr/users/istewart/src/shell/sh2.2/Release/RCS/Install,v 2.2 1993/12/03 13:32:52 istewart Exp $
+
+    $Log: Install,v $
+	Revision 2.2  1993/12/03  13:32:52  istewart
+	Release 2.2
+
+	Revision 2.1  1992/12/14  11:13:55  istewart
+	BETA 215 Fixes and 2.1 Release
+
+	Revision 2.0  1992/04/13  17:40:33  Ian_Stewartson
+	MS-Shell 2.0 Baseline release
+
+
+	
+________________________________________________________________________________
+
+To rebuild and install the shell, you should follow the following the steps:
+
+1)  If you have the binary only version, skip steps 2 through 4.
+
+2)  Load the include files in the include directory into the standard location
+    (\msc\include or equivalent).  Read CHANGES file for the additional
+    definitions which are required in the standard Microsoft C5 & C6 include
+    files and edit them in to the appropriate files.
+
+    We have standardised our MSDOS and Unix include files such that the same
+    include file exists our Unix system and MSDOS systems.  This makes porting
+    a lot easier.  If you don't want to edit the standard include files, you
+    will have to generate an new include file for the shell and include it as
+    the first include in all the C sources for the additional library functions
+    and the Shell itself
+
+3)  Modify the library function open so that the O_NOINHERIT flag is passed to
+    MSDOS by the library.  This is not strictly necessary.  I did it using
+    CodeView to see where the library function masks the bottom three bits,
+    noted the bytes around this location, extracted the open function from the
+    library, patched the mask to be 0x83 instead of 0x03, and then replaced
+    the function in the library (Also see the Patch.Lib file).
+
+5)  Build the shell, either using make or
+
+    For MSDOS (using Microsoft C5.1 or 6).  Look at the make file for the
+    flags to other compilers:
+
+	cl -c -AL -Olt sh*.c
+	masm /Ml sh0.asm
+	link sh0+sh1+sh2+sh3+sh4+sh5+sh6+sh7+sh8+sh9+sh10+sh11+sh12+sh13/noi/noe/stack:0x8000, shdos16.exe;
+
+	Note that the order is important.  SH0.OBJ must be the first object
+	file in the load line.
+    
+    For OS/2 (using Microsoft C6).  Look at the make file for the flags to
+    other compilers:
+	cl -o shos216 -AL -Olt -DOS2 sh*.c sh.def -F 8000
+
+5)  Install the shell executable in its correct location.  The executable is
+    either shdos16.exe or shdos32.exe (for MSDOS 3 to 6), shos216.exe
+    (for OS/2 1.x.), or shos216.exe or shos232.exe (for OS/2 2.x.).  Copy
+    this file to sh.exe in the correct directory.  If you don't change the
+    name, or change the name to something else, you must also change the name
+    of sh.ini to the same name.  For example:  shdos.exe is matched with
+    shdos.ini and sh210.exe is matched with sh210.ini.
+
+    Read the Notes file to see if there are any know problems with a
+    particular environment.
+
+6)  Modify the initialisation file sh.ini for your edit key preferences and
+    install it in the same directory as the executable.
+
+7)  Modify the scripts as appropriate for your installation and install
+    them in the correct directories.
+
+    /profile.sh		- your profile (NOT MINE) in your ${HOME} directory.
+    /etc/profile.sh	- your /etc profile (NOT MINE).  This must be /etc on
+	    		  the same disk drive as you start the shell on.
+			  Ie.  if you are in c:/bin when you start the
+			  shell, this must be in c:/etc/profile.sh.  If you
+			  are in f:/tools/sh200 when you start the shell,
+			  this must be in f:/etc/profile.sh.
+    sh.rc		- your ${ENV} file (NOT MINE).  Anywhere as long as
+			  ${ENV} in either ${HOME}/profile or /etc/profile
+			  declare the variable.
+
+			  Note:  This file is usuful for selecting the swap
+				 mode on startup.
+
+    extend.lst          - your Extended command line processing file (NOT MINE).
+    			  Anywhere as long as ${EXTENDED_LINE} in either
+			  ${HOME}/profile or /etc/profile declares the file.
+
+8)  Type "sh -0" and see what happens.
+
+9) If you have problems, check that the environment variables are set
+    correctly.  Use the set command under the MSDOS command.com and in the
+    shell.
+
+    Remember that some commands require DOS format file names and environment
+    variables.  So check the setting of these variables (using the shell's
+    msdos command) and the entries in ${EXTENDED_LINE}.
+
